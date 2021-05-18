@@ -1,4 +1,4 @@
-package com.zaidzakir.androidtestingsample.shoppingListApp
+package com.zaidzakir.androidtestingsample.shoppingListApp.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

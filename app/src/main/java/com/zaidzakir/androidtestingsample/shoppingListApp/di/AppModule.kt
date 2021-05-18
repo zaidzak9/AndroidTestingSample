@@ -5,6 +5,8 @@ import androidx.room.Room
 import com.zaidzakir.androidtestingsample.shoppingListApp.data.local.ShoppingDao
 import com.zaidzakir.androidtestingsample.shoppingListApp.data.local.ShoppingItemDatabase
 import com.zaidzakir.androidtestingsample.shoppingListApp.data.remote.PixabayAPI
+import com.zaidzakir.androidtestingsample.shoppingListApp.repositories.DefaultShoppingRepository
+import com.zaidzakir.androidtestingsample.shoppingListApp.repositories.ShoppingRepository
 import com.zaidzakir.androidtestingsample.shoppingListApp.utils.Constants.BASE_URL
 import com.zaidzakir.androidtestingsample.shoppingListApp.utils.Constants.DATABASE_NAME
 import dagger.Module
@@ -26,7 +28,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideSearchImageApi():PixabayAPI {
+    fun provideSearchImageApi(): PixabayAPI {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -36,13 +38,20 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideDefaultShoppingRepository(
+        dao: ShoppingDao,
+        api: PixabayAPI
+    ) = DefaultShoppingRepository(dao, api) as ShoppingRepository
+
+    @Singleton
+    @Provides
     fun provideShoppingItemDatabase(
         @ApplicationContext context: Context
-    ) = Room.databaseBuilder(context,ShoppingItemDatabase::class.java,DATABASE_NAME).build()
+    ) = Room.databaseBuilder(context, ShoppingItemDatabase::class.java, DATABASE_NAME).build()
 
     @Singleton
     @Provides
     fun provideShoppingDao(
-        database:ShoppingItemDatabase
+        database: ShoppingItemDatabase
     ) = database.shoppingDao()
 }
