@@ -10,6 +10,8 @@ import com.zaidzakir.androidtestingsample.getOrAwaitValue
 import com.zaidzakir.androidtestingsample.shoppingListApp.data.local.ShoppingDao
 import com.zaidzakir.androidtestingsample.shoppingListApp.data.local.ShoppingItem
 import com.zaidzakir.androidtestingsample.shoppingListApp.data.local.ShoppingItemDatabase
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
@@ -17,29 +19,45 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import javax.inject.Inject
+import javax.inject.Named
 
 /**
  *Created by Zaid Zakir
  */
 @ExperimentalCoroutinesApi
-@RunWith(AndroidJUnit4::class)
 @SmallTest
+@HiltAndroidTest
 class ShoppingDaoTest {
+
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
 
     //This rule tells android test to run everything one by one , without this u will get a error saying cannot complete task
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
-    private lateinit var database:ShoppingItemDatabase
+
+    @Inject
+    @Named("test_db") //need named annotation to tell hilt to where to inject from
+    lateinit var database:ShoppingItemDatabase
     private lateinit var dao: ShoppingDao
 
     @Before
     fun setup(){
+        //we use this to inject db reference
+        hiltRule.inject()
+        /*
+        Im keeping the unused comment below as reference to show that we dont need to instatiate the db if we use hilt for testing as well
+        below way isnt good if project too big, its okay for sample project like this but not really
+         */
+        /**
         database = Room.inMemoryDatabaseBuilder( //inMemoryDatabaseBuilder is used to tell the app and room to store data in the RAM
             // rather than persistemce memory so that we can have a new database for each testcases
             ApplicationProvider.getApplicationContext(),
             ShoppingItemDatabase::class.java
         ).allowMainThreadQueries().build() //we use this bcoz testcases should run in single thread ,
         // if they run in background or multiple threads , threads can manipulate each other, we want complete independence
+        */
         dao = database.shoppingDao()
     }
 

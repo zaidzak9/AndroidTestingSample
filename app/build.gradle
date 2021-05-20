@@ -18,7 +18,11 @@ android {
         versionCode 1
         versionName "1.0"
         buildConfigField("String","API_KEY",API_KEY)
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        /*
+        To test Dagger hilt in android we have to create a HiltTest Runner, and make it copy application class
+           and mention it here below
+         */
+        testInstrumentationRunner "com.zaidzakir.androidtestingsample.HiltTestRunner"
     }
 
     buildTypes {
@@ -45,7 +49,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
     // Architectural Components
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
 
     // Lifecycle
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
@@ -111,4 +115,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     androidTestImplementation "org.mockito:mockito-core:2.21.0"
+    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.28-alpha'
+    kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.28-alpha'
+
 }

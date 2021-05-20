@@ -9,7 +9,7 @@ import com.zaidzakir.androidtestingsample.shoppingListApp.utils.Resource
 /**
  *Created by Zaid Zakir
  * used to simulate the behaviour of the real repository
- * will be passed to the view model
+ * will be passed to the testing view model
  */
 class MockShoppingRepository : ShoppingRepository{
     //creating a list of shopping items to be inserted instead of a DB
