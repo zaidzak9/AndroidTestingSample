@@ -7,9 +7,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import com.google.common.truth.Truth.assertThat
 import com.zaidzakir.androidtestingsample.getOrAwaitValue
+import com.zaidzakir.androidtestingsample.launchFragmentInHiltContainer
 import com.zaidzakir.androidtestingsample.shoppingListApp.data.local.ShoppingDao
 import com.zaidzakir.androidtestingsample.shoppingListApp.data.local.ShoppingItem
 import com.zaidzakir.androidtestingsample.shoppingListApp.data.local.ShoppingItemDatabase
+import com.zaidzakir.androidtestingsample.shoppingListApp.ui.ShoppingListFragment
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -105,6 +107,12 @@ class ShoppingDaoTest {
         val totalPrice = dao.observeTotalPrice().getOrAwaitValue()
         assertThat(totalPrice).isEqualTo(10*2+10*2+10*2)
     }
+
+     @Test
+     fun testLaunchFragmentInHiltContainer(){
+         launchFragmentInHiltContainer<ShoppingListFragment> {
+         }
+     }
 
 
 }
