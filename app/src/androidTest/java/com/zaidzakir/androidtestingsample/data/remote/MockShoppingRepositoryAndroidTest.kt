@@ -12,7 +12,7 @@ import com.zaidzakir.androidtestingsample.shoppingListApp.utils.Resource
  * used to simulate the behaviour of the real repository
  * will be passed to the testing view model
  */
-class MockShoppingRepository : ShoppingRepository {
+class MockShoppingRepositoryAndroidTest : ShoppingRepository {
     //creating a list of shopping items to be inserted instead of a DB
     private val shoppingItems = mutableListOf<ShoppingItem>()
     private val observableShoppingItems = MutableLiveData<List<ShoppingItem>>(shoppingItems)

@@ -8,17 +8,15 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.filters.MediumTest
 import com.zaidzakir.androidtestingsample.R
-import com.zaidzakir.androidtestingsample.data.remote.MockShoppingRepository
+import com.zaidzakir.androidtestingsample.data.remote.MockShoppingRepositoryAndroidTest
 import com.zaidzakir.androidtestingsample.getOrAwaitValue
 import com.zaidzakir.androidtestingsample.launchFragmentInHiltContainer
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mock
 import org.mockito.Mockito.*
 import com.google.common.truth.Truth.assertThat
 
@@ -52,7 +50,7 @@ class AddShoppingFragmentTest{
 
     @Test
     fun pressBackButton_imageUrlSetToEmptyString(){
-        val testViewModel = ShoppingViewModel(MockShoppingRepository())
+        val testViewModel = ShoppingViewModel(MockShoppingRepositoryAndroidTest())
         val navController = mock(NavController::class.java)
         launchFragmentInHiltContainer<AddShoppingFragment> {
             Navigation.setViewNavController(requireView(), navController)
