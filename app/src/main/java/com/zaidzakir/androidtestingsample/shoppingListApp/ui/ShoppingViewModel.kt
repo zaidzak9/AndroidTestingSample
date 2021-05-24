@@ -50,7 +50,7 @@ class ShoppingViewModel @Inject constructor(
     }
 
     fun validateShoppingItem(name: String, amount: String, price: String){
-        if (name.isNullOrEmpty() || amount.isNullOrEmpty() || price.isNullOrEmpty()){
+        if (name.isEmpty() || amount.isEmpty() || price.isEmpty()){
              _insertShoppingItem.postValue(Events(Resource.error("Please enter all information",null)))
             return
         }
