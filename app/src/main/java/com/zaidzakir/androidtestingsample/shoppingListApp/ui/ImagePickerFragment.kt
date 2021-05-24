@@ -9,12 +9,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.zaidzakir.androidtestingsample.R
 import com.zaidzakir.androidtestingsample.shoppingListApp.adapters.ImageAdapter
 import com.zaidzakir.androidtestingsample.shoppingListApp.utils.Constants.GRID_SPAN_COUNT
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_image_pick.*
 import javax.inject.Inject
 
 /**
  *Created by Zaid Zakir
  */
+@AndroidEntryPoint
 class ImagePickerFragment @Inject constructor(
     val imageAdapter : ImageAdapter
 ):Fragment(R.layout.fragment_image_pick) {

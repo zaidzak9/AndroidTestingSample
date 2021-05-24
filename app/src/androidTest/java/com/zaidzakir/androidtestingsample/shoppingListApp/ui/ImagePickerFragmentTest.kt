@@ -52,7 +52,9 @@ class ImagePickerFragmentTest {
         val navController = mock(NavController::class.java)
         val imageUrl = "TESTURL"
         val testViewModel = ShoppingViewModel(MockShoppingRepositoryAndroidTest())
-        launchFragmentInHiltContainer<ImagePickerFragment>(fragmentFactory = fragmentFactory) {
+        launchFragmentInHiltContainer<ImagePickerFragment>(
+            fragmentFactory = fragmentFactory
+        ) {
             Navigation.setViewNavController(requireView(),navController)
             imageAdapter.images = listOf(imageUrl)
             shoppingViewModel = testViewModel
