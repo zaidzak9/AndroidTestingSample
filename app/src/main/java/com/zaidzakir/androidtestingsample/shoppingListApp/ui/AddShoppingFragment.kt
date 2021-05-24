@@ -8,11 +8,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.RequestManager
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
 import com.zaidzakir.androidtestingsample.R
 import com.zaidzakir.androidtestingsample.shoppingListApp.utils.Status
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_add_shopping_item.*
 import kotlinx.android.synthetic.main.fragment_shopping.*
 import javax.inject.Inject
@@ -20,9 +18,9 @@ import javax.inject.Inject
 /**
  *Created by Zaid Zakir
  */
-@AndroidEntryPoint
+
 class AddShoppingFragment @Inject constructor(
-    val glide : RequestManager
+    val glide: RequestManager
 ):Fragment(R.layout.fragment_add_shopping_item) {
 
     lateinit var shoppingViewModel: ShoppingViewModel
@@ -31,7 +29,7 @@ class AddShoppingFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         shoppingViewModel = ViewModelProvider(requireActivity()).get(ShoppingViewModel::class.java)
 
-        subscribeToObserver()
+
         btnAddShoppingItem.setOnClickListener {
             shoppingViewModel.validateShoppingItem(
                 etShoppingItemName.text.toString(),
@@ -44,6 +42,7 @@ class AddShoppingFragment @Inject constructor(
                 AddShoppingFragmentDirections.actionAddShoppingFragmentToImagePickerFragment()
             )
         }
+        subscribeToObserver()
 
         val callback = object : OnBackPressedCallback (true){
             override fun handleOnBackPressed() {
@@ -55,8 +54,8 @@ class AddShoppingFragment @Inject constructor(
     }
 
     private fun subscribeToObserver(){
-        shoppingViewModel.imageUrl.observe(viewLifecycleOwner, Observer {imageUrl ->
-            glide.load(imageUrl).into(ivShoppingImage)
+        shoppingViewModel.imageUrl.observe(viewLifecycleOwner, Observer {
+            glide.load(it).into(ivShoppingImage)
         })
         shoppingViewModel.insertShoppingItem.observe(viewLifecycleOwner, Observer {
             it.contentIfHandled()?.let { result->

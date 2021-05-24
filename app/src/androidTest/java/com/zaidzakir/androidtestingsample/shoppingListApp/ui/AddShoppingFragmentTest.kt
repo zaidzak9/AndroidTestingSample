@@ -31,12 +31,11 @@ import javax.inject.Inject
 @HiltAndroidTest
 @ExperimentalCoroutinesApi
 class AddShoppingFragmentTest{
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @get:Rule
     val hiltAndroidRule = HiltAndroidRule(this)
-
-    @get:Rule
-    var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Inject
     lateinit var fragmentFactory: ShoppingFragmentFactory
@@ -46,11 +45,12 @@ class AddShoppingFragmentTest{
         hiltAndroidRule.inject()
     }
 
-
     @Test
     fun pressBackButton_popBackStack(){
         val navController = mock(NavController::class.java)
-        launchFragmentInHiltContainer<AddShoppingFragment> {
+        launchFragmentInHiltContainer<AddShoppingFragment> (
+            fragmentFactory = fragmentFactory
+        ) {
             Navigation.setViewNavController(requireView(),navController)
         }
         pressBack()
@@ -61,7 +61,9 @@ class AddShoppingFragmentTest{
     fun pressBackButton_imageUrlSetToEmptyString(){
         val testViewModel = ShoppingViewModel(MockShoppingRepositoryAndroidTest())
         val navController = mock(NavController::class.java)
-        launchFragmentInHiltContainer<AddShoppingFragment> {
+        launchFragmentInHiltContainer<AddShoppingFragment> (
+            fragmentFactory = fragmentFactory
+        ) {
             Navigation.setViewNavController(requireView(), navController)
             testViewModel.setImageUrl("http://url")
             shoppingViewModel = testViewModel
@@ -75,33 +77,35 @@ class AddShoppingFragmentTest{
     @Test
     fun clickAddImageBtn_navigateToImagePicker(){
         val navController = mock(NavController::class.java)
-        launchFragmentInHiltContainer<AddShoppingFragment> {
+
+        launchFragmentInHiltContainer<AddShoppingFragment> (
+            fragmentFactory = fragmentFactory
+        ) {
             Navigation.setViewNavController(requireView(),navController)
         }
-        onView(withId(R.id.ivShoppingImage)).perform(click())
+
+        onView(withId(R.id.ivShoppingImage)).perform(ViewActions.click())
+
         verify(navController).navigate(
             AddShoppingFragmentDirections.actionAddShoppingFragmentToImagePickerFragment()
         )
     }
 
     @Test
-    fun clickInsertIntoDb_itemInsertedIntoDb(){
-        val navController = mock(NavController::class.java)
+    fun clickInsertIntoDb_itemInsertedIntoDb() {
         val testViewModel = ShoppingViewModel(MockShoppingRepositoryAndroidTest())
         launchFragmentInHiltContainer<AddShoppingFragment>(
             fragmentFactory = fragmentFactory
         ) {
-            Navigation.setViewNavController(requireView(),navController)
-            shoppingViewModel= testViewModel
+            shoppingViewModel = testViewModel
         }
         onView(withId(R.id.etShoppingItemName)).perform(replaceText("shopping item"))
         onView(withId(R.id.etShoppingItemAmount)).perform(replaceText("5"))
-        onView(withId(R.id.etShoppingItemPrice)).perform(replaceText("1.5"))
+        onView(withId(R.id.etShoppingItemPrice)).perform(replaceText("5.5"))
         onView(withId(R.id.btnAddShoppingItem)).perform(click())
 
         assertThat(testViewModel.getShoppingItems.getOrAwaitValue())
-            .contains(ShoppingItem("shopping item",5,1.5f,""))
-
+            .contains(ShoppingItem("shopping item", 5, 5.5f, ""))
     }
 
 }

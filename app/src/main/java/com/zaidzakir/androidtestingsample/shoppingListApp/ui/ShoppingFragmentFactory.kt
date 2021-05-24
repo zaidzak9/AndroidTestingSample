@@ -11,7 +11,7 @@ import javax.inject.Inject
  */
 class ShoppingFragmentFactory @Inject constructor(
     private val adapter :ImageAdapter,
-    private val glide: RequestManager
+    private val glide:RequestManager
 ): FragmentFactory() {
 
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
