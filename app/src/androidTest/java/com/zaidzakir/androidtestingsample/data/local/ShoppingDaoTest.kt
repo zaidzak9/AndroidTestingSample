@@ -1,6 +1,7 @@
 package com.zaidzakir.androidtestingsample.data.local
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.fragment.app.FragmentFactory
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -11,6 +12,7 @@ import com.zaidzakir.androidtestingsample.launchFragmentInHiltContainer
 import com.zaidzakir.androidtestingsample.shoppingListApp.data.local.ShoppingDao
 import com.zaidzakir.androidtestingsample.shoppingListApp.data.local.ShoppingItem
 import com.zaidzakir.androidtestingsample.shoppingListApp.data.local.ShoppingItemDatabase
+import com.zaidzakir.androidtestingsample.shoppingListApp.ui.ShoppingFragmentFactory
 import com.zaidzakir.androidtestingsample.shoppingListApp.ui.ShoppingListFragment
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -38,6 +40,9 @@ class ShoppingDaoTest {
     //This rule tells android test to run everything one by one , without this u will get a error saying cannot complete task
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @Inject
+    lateinit var fragmentFactory: ShoppingFragmentFactory
 
     @Inject
     @Named("test_db") //need named annotation to tell hilt to where to inject from
@@ -108,11 +113,13 @@ class ShoppingDaoTest {
         assertThat(totalPrice).isEqualTo(10*2+10*2+10*2)
     }
 
-     @Test
-     fun testLaunchFragmentInHiltContainer(){
-         launchFragmentInHiltContainer<ShoppingListFragment> {
-         }
-     }
+//     @Test
+//     fun testLaunchFragmentInHiltContainer(){
+//         launchFragmentInHiltContainer<ShoppingListFragment>(
+//             fragmentFactory = fragmentFactory
+//         ) {
+//         }
+//     }
 
 
 }

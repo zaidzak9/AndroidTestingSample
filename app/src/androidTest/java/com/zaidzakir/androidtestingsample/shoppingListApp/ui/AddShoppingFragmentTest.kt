@@ -32,13 +32,13 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 class AddShoppingFragmentTest{
     @get:Rule
-    var instantTaskExecutorRule = InstantTaskExecutorRule()
-
-    @get:Rule
     val hiltAndroidRule = HiltAndroidRule(this)
 
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
+
     @Inject
-    lateinit var fragmentFactory: ShoppingFragmentFactory
+    lateinit var fragmentFactory: ShoppingFragmentFactoryAndroidTest
 
     @Before
     fun setup(){
@@ -46,15 +46,20 @@ class AddShoppingFragmentTest{
     }
 
     @Test
-    fun pressBackButton_popBackStack(){
-        val navController = mock(NavController::class.java)
-        launchFragmentInHiltContainer<AddShoppingFragment> (
+    fun clickInsertIntoDb_itemInsertedIntoDb() {
+        val testViewModel = ShoppingViewModel(MockShoppingRepositoryAndroidTest())
+        launchFragmentInHiltContainer<AddShoppingFragment>(
             fragmentFactory = fragmentFactory
         ) {
-            Navigation.setViewNavController(requireView(),navController)
+            shoppingViewModel = testViewModel
         }
-        pressBack()
-        verify(navController).popBackStack()
+        onView(withId(R.id.etShoppingItemName)).perform(replaceText("shopping item"))
+        onView(withId(R.id.etShoppingItemAmount)).perform(replaceText("5"))
+        onView(withId(R.id.etShoppingItemPrice)).perform(replaceText("5.5"))
+        onView(withId(R.id.btnAddShoppingItem)).perform(click())
+
+        assertThat(testViewModel.getShoppingItems.getOrAwaitValue())
+            .contains(ShoppingItem("shopping item", 5, 5.5f, ""))
     }
 
     @Test
@@ -84,28 +89,26 @@ class AddShoppingFragmentTest{
             Navigation.setViewNavController(requireView(),navController)
         }
 
-        onView(withId(R.id.ivShoppingImage)).perform(ViewActions.click())
+        onView(withId(R.id.ivShoppingImage)).perform(click())
 
         verify(navController).navigate(
             AddShoppingFragmentDirections.actionAddShoppingFragmentToImagePickerFragment()
         )
     }
 
+
     @Test
-    fun clickInsertIntoDb_itemInsertedIntoDb() {
-        val testViewModel = ShoppingViewModel(MockShoppingRepositoryAndroidTest())
-        launchFragmentInHiltContainer<AddShoppingFragment>(
+    fun pressBackButton_popBackStack(){
+        val navController = mock(NavController::class.java)
+        launchFragmentInHiltContainer<AddShoppingFragment> (
             fragmentFactory = fragmentFactory
         ) {
-            shoppingViewModel = testViewModel
+            Navigation.setViewNavController(requireView(),navController)
         }
-        onView(withId(R.id.etShoppingItemName)).perform(replaceText("shopping item"))
-        onView(withId(R.id.etShoppingItemAmount)).perform(replaceText("5"))
-        onView(withId(R.id.etShoppingItemPrice)).perform(replaceText("5.5"))
-        onView(withId(R.id.btnAddShoppingItem)).perform(click())
-
-        assertThat(testViewModel.getShoppingItems.getOrAwaitValue())
-            .contains(ShoppingItem("shopping item", 5, 5.5f, ""))
+        pressBack()
+        verify(navController).popBackStack()
     }
+
+
 
 }

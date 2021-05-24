@@ -92,7 +92,7 @@ class ShoppingViewModel @Inject constructor(
         _images.value = Events(Resource.loading(null))
         viewModelScope.launch {
             val response = repository.searchForImage(query)
-            _images.value = (Events(response))
+            _images.value = Events(response)
         }
     }
 

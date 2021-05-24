@@ -11,6 +11,7 @@ import com.bumptech.glide.RequestManager
 import com.google.android.material.snackbar.Snackbar
 import com.zaidzakir.androidtestingsample.R
 import com.zaidzakir.androidtestingsample.shoppingListApp.utils.Status
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_add_shopping_item.*
 import kotlinx.android.synthetic.main.fragment_shopping.*
 import javax.inject.Inject
@@ -18,7 +19,7 @@ import javax.inject.Inject
 /**
  *Created by Zaid Zakir
  */
-
+@AndroidEntryPoint
 class AddShoppingFragment @Inject constructor(
     val glide: RequestManager
 ):Fragment(R.layout.fragment_add_shopping_item) {
@@ -28,8 +29,7 @@ class AddShoppingFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         shoppingViewModel = ViewModelProvider(requireActivity()).get(ShoppingViewModel::class.java)
-
-
+        subscribeToObserver()
         btnAddShoppingItem.setOnClickListener {
             shoppingViewModel.validateShoppingItem(
                 etShoppingItemName.text.toString(),
@@ -42,7 +42,6 @@ class AddShoppingFragment @Inject constructor(
                 AddShoppingFragmentDirections.actionAddShoppingFragmentToImagePickerFragment()
             )
         }
-        subscribeToObserver()
 
         val callback = object : OnBackPressedCallback (true){
             override fun handleOnBackPressed() {
@@ -61,7 +60,8 @@ class AddShoppingFragment @Inject constructor(
             it.contentIfHandled()?.let { result->
                 when(result.status){
                     Status.SUCCESS -> {
-                        Snackbar.make(requireActivity().rootLayout,
+                        Snackbar.make(
+                            activity!!.findViewById(android.R.id.content),
                         "Shopping item Added",
                         Snackbar.LENGTH_LONG).show()
                         findNavController().popBackStack()
@@ -70,7 +70,7 @@ class AddShoppingFragment @Inject constructor(
                         // NO OP
                     }
                     Status.ERROR ->{
-                        Snackbar.make(requireActivity().rootLayout,
+                        Snackbar.make(activity!!.findViewById(android.R.id.content),
                             result.message?: "A Error occurred",
                             Snackbar.LENGTH_LONG).show()
                     }

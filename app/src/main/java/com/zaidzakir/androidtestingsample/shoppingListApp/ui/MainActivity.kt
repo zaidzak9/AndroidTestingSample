@@ -8,7 +8,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
     @Inject
     lateinit var fragmentFactory: ShoppingFragmentFactory
     override fun onCreate(savedInstanceState: Bundle?) {
