@@ -33,7 +33,7 @@ class MockShoppingRepository : ShoppingRepository{
     }
 
     override suspend fun insertShoppingItem(shoppingItem: ShoppingItem) {
-        shoppingItems.remove(shoppingItem)
+        shoppingItems.add(shoppingItem)
         refreshLiveData()
     }
 
