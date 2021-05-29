@@ -13,10 +13,12 @@ import org.junit.Test
  */
 class CompareStringsTest{
     private lateinit var compareStrings:CompareStrings
+    private lateinit var context:Context
 
     @Before
     fun setup(){
         compareStrings = CompareStrings()
+        context =  ApplicationProvider.getApplicationContext<Context>()
     }
 
     @After
@@ -26,14 +28,12 @@ class CompareStringsTest{
 
     @Test
     fun ifBothStringMatches_returnTrue(){
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val result = compareStrings.compareStrings(context, R.string.app_name,"AndroidTestingSample")
+        val result = compareStrings.compareStrings(context, R.string.app_name,"Shopping List")
         assertThat(result).isTrue()
     }
 
     @Test
     fun ifBothStringDontMatches_returnFalse(){
-        val context = ApplicationProvider.getApplicationContext<Context>()
         val result = compareStrings.compareStrings(context, R.string.app_name,"3rdPartyApp")
         assertThat(result).isFalse()
     }
